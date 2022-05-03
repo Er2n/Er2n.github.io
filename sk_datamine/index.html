@@ -11,17 +11,7 @@
 
         body {
             font-family: "Trebuchet MS";
-        }
-
-        #ta {
-            margin-left: 20px;
-            width: 40%;
-        }
-
-        .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
         }
 
         #input {
@@ -33,6 +23,20 @@
             text-align: center;
             box-shadow: 0 0 7px rgb(134, 134, 134);
             transition: box-shadow .1s;
+        }
+
+        #down {
+            text-decoration: none;
+            color: #000;
+        }
+        #link {
+            height: 40px;
+            width: 170px;
+            border: 2px dashed silver;
+            display: table-cell;
+            vertical-align: middle;
+            font-size: 22px;
+            font-weight: 800;
         }
 
         #input:hover {
@@ -55,7 +59,6 @@
             border: 2px dashed silver;
             height: 100%;
             width: 100px;
-            text-align: center;
             margin-right: 10px;
             display: inline-block;
         }
@@ -133,7 +136,7 @@
                 var oParser = new DOMParser();
                 var oDOM = oParser.parseFromString(reader.result, "application/xml");
                 for (let i = 0; i < 17; i++) {
-                    oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (document.getElementById("c" + i.toString()).children[2].checked) ? "true" : "false";
+                    //oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (document.getElementById("c" + i.toString()).children[2].checked) ? "true" : "false";
                     let oSkins = document.getElementById("c" + i.toString()).children[3];
                     for (let y = 1; y < oSkins.children.length; y++) {
                         oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y - 1].children[1].checked) ? "1" : "0";
@@ -158,19 +161,20 @@
 
 <body>
     <h1 style="color: red;">БЕТА ТЕСТ САЙТА</h1>
-    <div class="content">
-        <div>
-            <h2>Файл с сохранением</h2><input type="file" id="input" style="display: inline-block;"
-                onchange="updateData()">
-        </div>
-        <div id="ta">
-            <h2>"Пропатченое" сохранение</h2><a id="down" href="#"
-                download="com.ChillyRoom.DungeonShooter.v2.playerprefs.xml" onclick="generateSave()">Скачать</a>
-            <span style="color: red;">!Важно!</span> Нельзя просто вставить пропатченый файл в в папку shared prefs
-            нужно текстовым редактором заменить содержимое непропатченого файла на содержимое пропатченого (copy paste)
-        </div>
+    <hr>
+    <div>
+        <h2>Файл с сохранением</h2><input type="file" id="input" style="display: inline-block;" onchange="updateData()">
     </div>
+    <div>
+        <h2>"Пропатченое" сохранение</h2>
+        <a id="down" href="#" download="com.ChillyRoom.DungeonShooter.v2.playerprefs.xml" onclick="generateSave()"><div id="link">Скачать</div></a>
+        <div style="color: red; font-size: larger; margin-top: 10px;">!Важно!</div> Нельзя просто вставить пропатченый файл в в папку shared prefs,
+        нужно текстовым редактором заменить содержимое непропатченого файла на содержимое пропатченого (copy paste)
+    </div>
+    <h2>Выбор скинов</h2>
     <div id="patches"></div>
+    <span>P.S. разблокировка персонажей в данный момент не работает
+    </span>
 </body>
 
 </html>
