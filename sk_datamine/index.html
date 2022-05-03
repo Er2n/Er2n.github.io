@@ -74,6 +74,40 @@
         }
     </style>
     <script>
+        window.onload = function () {
+            let perses = [["Knight", "Рыцарь", 14], ["Ranger", "Разбойник", 13], ["Mage", "Маг", 14], ["Assassin", "Ассасин", 13], ["Alchemist", "Алхимик", 10], ["Engineer", "Инженер", 13], ["Vampire", "Вампир", 11], ["Paladin", "Паладин", 14], ["Elves", "Ельф", 11], ["Werewolf", "Оборотень", 15], ["Priest", "Священник", 12], ["Druid", "Друид", 10], ["Robot", "Робот", 12], ["Viking", "Берсерк", 14], ["Necromancer", "Некромант", 7], ["Officer", "Офицер", 8], ["Taoist", "Даос", 9]];
+            for (let i = 0; i < perses.length; i++) {
+                let main = document.createElement("div");
+                main.className = "pers";
+                main.id = "c" + i.toString();
+                let temp = document.createElement("div");
+                temp.innerHTML = perses[i][1];
+                main.appendChild(temp);
+                temp = document.createElement("img");
+                temp.src = perses[i][0] + "/p.webp";
+                temp.height = 64;
+                temp.style = "display: block;";
+                main.appendChild(temp);
+                temp = document.createElement("input");
+                temp.type = "checkbox";
+                main.appendChild(temp);
+                temp = document.createElement("ul");
+                temp.className = "skins"
+                for (let y = 0; y < perses[i][2]; y++) {
+                    let li = document.createElement("li");
+                    let im = document.createElement("img");
+                    let checkbx = document.createElement("input");
+                    checkbx.type = "checkbox";
+                    im.src = perses[i][0] + "/" + (y + 1).toString() + ".webp";
+                    im.width = "50";
+                    li.appendChild(im);
+                    li.appendChild(checkbx);
+                    temp.appendChild(li);
+                }
+                main.appendChild(temp);
+                document.getElementById("patches").appendChild(main);
+            }
+        };
         function updateData() {
             let file = document.getElementById("input").files[0];
             let reader = new FileReader();
@@ -84,7 +118,7 @@
                     document.getElementById("c" + i.toString()).children[2].checked = (oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML == "true") ? true : false;
                     let oSkins = document.getElementById("c" + i.toString()).children[3];
                     for (let y = 1; y < oSkins.children.length; y++) {
-                        oSkins.children[y-1].children[1].checked = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
+                        oSkins.children[y - 1].children[1].checked = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
                     }
                 }
             };
@@ -102,22 +136,22 @@
                     oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (document.getElementById("c" + i.toString()).children[2].checked) ? "true" : "false";
                     let oSkins = document.getElementById("c" + i.toString()).children[3];
                     for (let y = 1; y < oSkins.children.length; y++) {
-                        oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y-1].children[1].checked) ? "1" : "0";
+                        oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y - 1].children[1].checked) ? "1" : "0";
                     }
                 }
                 let ser = new XMLSerializer;
                 outt = ser.serializeToString(oDOM);
                 let blob = new Blob([outt], { type: "application/octet-stream" });
                 let url = window.URL.createObjectURL(blob);
-                document.getElementById("down").href = url;
-                document.getElementById("down").onclick = next;
-                document.getElementById("down").click();
+                let a = document.getElementById("down");
+                a.href = url;
+                a.onclick = function () {
+                    document.getElementById("down").onclick = generateSave;
+                };
+                a.click();
             };
-            reader.readAsText(file, "UTF-8");  
+            reader.readAsText(file, "UTF-8");
             event.preventDefault();
-        }
-        function next() {
-            document.getElementById("down").onclick = generateSave;
         }
     </script>
 </head>
@@ -126,322 +160,17 @@
     <h1 style="color: red;">БЕТА ТЕСТ САЙТА</h1>
     <div class="content">
         <div>
-            <h2>Файл с сохранением</h2><input type="file" id="input" style="display: inline-block;" onchange="updateData()">
+            <h2>Файл с сохранением</h2><input type="file" id="input" style="display: inline-block;"
+                onchange="updateData()">
         </div>
         <div id="ta">
             <h2>"Пропатченое" сохранение</h2><a id="down" href="#"
                 download="com.ChillyRoom.DungeonShooter.v2.playerprefs.xml" onclick="generateSave()">Скачать</a>
-                <span style="color: red;">!Важно!</span> Нельзя просто вставить пропатченый файл в в папку shared prefs нужно текстовым редактором заменить содержимое непропатченого файла на содержимое пропатченого (copy paste)
-
+            <span style="color: red;">!Важно!</span> Нельзя просто вставить пропатченый файл в в папку shared prefs
+            нужно текстовым редактором заменить содержимое непропатченого файла на содержимое пропатченого (copy paste)
         </div>
     </div>
-    <div id="patches">
-        <div class="pers" id="c0">
-            <div>Рыцарь</div>
-            <img src="Knight/knight.webp" height="64" style="display: block;">
-            <input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Knight/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/13.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Knight/14.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c1">
-            <div>Разбойник</div>
-            <img src="Rogue/rogue.webp" height="64" style="display: block;">
-            <input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Rogue/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Rogue/13.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c2">
-            <div>Маг</div>
-            <img src="Wither/wither.webp" height="64" style="display: block;">
-            <input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Wither/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/13.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Wither/14.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c3">
-            <div>Ассасин</div>
-            <img src="Assa/assa.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Assa/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Assa/13.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c4">
-            <div>Алхимик</div>
-            <img src="Alho/alho.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Alho/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Alho/10.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c5">
-            <div>Инженер</div>
-            <img src="Zhir/zhir.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Zhir/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Zhir/13.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c6">
-            <div>Вампир</div>
-            <img src="Vampire/Vampire.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Vampire/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Vampire/11.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c7">
-            <div>Паладин</div>
-            <img src="Paladin/Paladin.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Paladin/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/13.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Paladin/14.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c8">
-            <div>Эльф</div>
-            <img src="Elf/Elf.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Elf/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Elf/11.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c9">
-            <div>Оборотень</div>
-            <img src="Oborot/oborot.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Oborot/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/13.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/14.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Oborot/15.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c10">
-            <div>Священник</div>
-            <img src="Priest/Priest.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Priest/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Priest/12.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c11">
-            <div>Друид</div>
-            <img src="Druid/Druid.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Druid/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Druid/10.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c12">
-            <div>Робот</div>
-            <img src="Robot/Robot.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Robot/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Robot/12.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c13">
-            <div>Берсерк</div>
-            <img src="Beserk/Beserk.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Beserk/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/9.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/10.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/11.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/12.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/13.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Beserk/14.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c14">
-            <div>Некромант</div>
-            <img src="Necro/Necro.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Necro/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Necro/7.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c15">
-            <div>Офицер</div>
-            <img src="Officer/Officer.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Officer/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Officer/8.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-        <div class="pers" id="c16">
-            <div>Даос</div>
-            <img src="Dao/Taoist.webp" height="64" style="display: block"><input type="checkbox" class="unlock">
-            <ul class="skins">
-                <li><img src="Dao/1.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/2.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/3.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/4.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/5.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/6.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/7.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/8.webp" width="50"><input type="checkbox"></li>
-                <li><img src="Dao/9.webp" width="50"><input type="checkbox"></li>
-            </ul>
-        </div>
-    </div>
+    <div id="patches"></div>
 </body>
 
 </html>
