@@ -135,7 +135,7 @@
                         curPers.children[4].children[y].checked = (oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value == "1") ? true : false;
                     }
                     let oSkins = curPers.children[5];
-                    for (let y = 1; y < oSkins.children.length; y++) {
+                    for (let y = 1; y < oSkins.children.length + 1; y++) {
                         oSkins.children[y - 1].children[1].checked = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
                     }
                 }
@@ -158,7 +158,7 @@
                         oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value = (curPers.children[4].children[y].checked) ? "1" : "0";
                     }
                     let oSkins = curPers.children[5];
-                    for (let y = 1; y < oSkins.children.length; y++) {
+                    for (let y = 1; y < oSkins.children.length + 1; y++) {
                         oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y - 1].children[1].checked) ? "1" : "0";
                     }
                 }
