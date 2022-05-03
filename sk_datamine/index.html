@@ -45,7 +45,7 @@
 
         #patches {
             border: 2px dashed silver;
-            height: 400px;
+            height: 500px;
             width: 800px;
             margin: 10px;
             overflow-x: scroll;
@@ -68,7 +68,7 @@
             padding-left: 0px;
             overflow-y: scroll;
             overflow-x: hidden;
-            height: 264px;
+            height: 324px;
             border-top: 2px dashed silver;
         }
 
@@ -77,8 +77,8 @@
         }
     </style>
     <script>
+        var perses = [["Knight", "Рыцарь", 14], ["Ranger", "Разбойник", 13], ["Mage", "Маг", 14], ["Assassin", "Ассасин", 13], ["Alchemist", "Алхимик", 10], ["Engineer", "Инженер", 13], ["Vampire", "Вампир", 11], ["Paladin", "Паладин", 14], ["Elves", "Ельф", 11], ["Werewolf", "Оборотень", 15], ["Priest", "Священник", 12], ["Druid", "Друид", 10], ["Robot", "Робот", 12], ["Viking", "Берсерк", 14], ["Necromancer", "Некромант", 7], ["Officer", "Офицер", 8], ["Taoist", "Даос", 9]];
         window.onload = function () {
-            let perses = [["Knight", "Рыцарь", 14], ["Ranger", "Разбойник", 13], ["Mage", "Маг", 14], ["Assassin", "Ассасин", 13], ["Alchemist", "Алхимик", 10], ["Engineer", "Инженер", 13], ["Vampire", "Вампир", 11], ["Paladin", "Паладин", 14], ["Elves", "Ельф", 11], ["Werewolf", "Оборотень", 15], ["Priest", "Священник", 12], ["Druid", "Друид", 10], ["Robot", "Робот", 12], ["Viking", "Берсерк", 14], ["Necromancer", "Некромант", 7], ["Officer", "Офицер", 8], ["Taoist", "Даос", 9]];
             for (let i = 0; i < perses.length; i++) {
                 let main = document.createElement("div");
                 main.className = "pers";
@@ -94,8 +94,19 @@
                 temp = document.createElement("input");
                 temp.type = "checkbox";
                 main.appendChild(temp);
+                temp = document.createElement("div");
+                temp.innerHTML = "Ульты";
+                main.appendChild(temp);
+                temp = document.createElement("div");
+                let skillCheck;
+                for (let y = 0; y < 3; y++) {
+                    skillCheck = document.createElement("input");
+                    skillCheck.type = "checkbox";
+                    temp.appendChild(skillCheck);
+                }
+                main.appendChild(temp);
                 temp = document.createElement("ul");
-                temp.className = "skins"
+                temp.className = "skins";
                 for (let y = 0; y < perses[i][2]; y++) {
                     let li = document.createElement("li");
                     let im = document.createElement("img");
@@ -118,8 +129,12 @@
                 var oParser = new DOMParser();
                 var oDOM = oParser.parseFromString(reader.result, "application/xml");
                 for (let i = 0; i < 17; i++) {
-                    document.getElementById("c" + i.toString()).children[2].checked = (oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML == "true") ? true : false;
-                    let oSkins = document.getElementById("c" + i.toString()).children[3];
+                    let curPers = document.getElementById("c" + i.toString());
+                    curPers.children[2].checked = (oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML == "true") ? true : false;
+                    for (let y = 0; y < 3; y++) {
+                        curPers.children[4].children[y].checked = (oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value == "1") ? true : false;
+                    }
+                    let oSkins = curPers.children[5];
                     for (let y = 1; y < oSkins.children.length; y++) {
                         oSkins.children[y - 1].children[1].checked = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
                     }
@@ -135,9 +150,14 @@
             reader.onload = function () {
                 var oParser = new DOMParser();
                 var oDOM = oParser.parseFromString(reader.result, "application/xml");
+                
                 for (let i = 0; i < 17; i++) {
-                    //oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (document.getElementById("c" + i.toString()).children[2].checked) ? "true" : "false";
-                    let oSkins = document.getElementById("c" + i.toString()).children[3];
+                    let curPers = document.getElementById("c" + i.toString());
+                    oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (curPers.children[2].checked) ? "true" : "false";
+                    for (let y = 0; y < 3; y++) {
+                        oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value = (curPers.children[4].children[y].checked) ? "1" : "0";
+                    }
+                    let oSkins = curPers.children[5];
                     for (let y = 1; y < oSkins.children.length; y++) {
                         oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y - 1].children[1].checked) ? "1" : "0";
                     }
@@ -173,8 +193,5 @@
     </div>
     <h2>Выбор скинов</h2>
     <div id="patches"></div>
-    <span>P.S. разблокировка персонажей в данный момент не работает
-    </span>
 </body>
-
 </html>
