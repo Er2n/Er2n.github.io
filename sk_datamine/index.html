@@ -29,12 +29,14 @@
             text-decoration: none;
             color: #000;
         }
+
         #link {
             height: 40px;
             width: 170px;
             border: 2px dashed silver;
-            display: table-cell;
-            vertical-align: middle;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-size: 22px;
             font-weight: 800;
         }
@@ -75,8 +77,33 @@
         .skins li {
             margin-bottom: 4px;
         }
+/*         #modal_w {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 5px #bbb;
+        }
+        #black_screen {
+            position: fixed;
+            background-color: #000;
+            opacity: .5;
+            width: 100%;
+            height: 100%;
+        }
+        #modal_cont {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            position: fixed;
+        } */
     </style>
     <script>
+        var curUnlocks = [];
         var perses = [["Knight", "Рыцарь", 14], ["Ranger", "Разбойник", 13], ["Mage", "Маг", 14], ["Assassin", "Ассасин", 13], ["Alchemist", "Алхимик", 10], ["Engineer", "Инженер", 13], ["Vampire", "Вампир", 11], ["Paladin", "Паладин", 14], ["Elves", "Ельф", 11], ["Werewolf", "Оборотень", 15], ["Priest", "Священник", 12], ["Druid", "Друид", 10], ["Robot", "Робот", 12], ["Viking", "Берсерк", 14], ["Necromancer", "Некромант", 7], ["Officer", "Офицер", 8], ["Taoist", "Даос", 9]];
         window.onload = function () {
             for (let i = 0; i < perses.length; i++) {
@@ -89,8 +116,9 @@
                 temp = document.createElement("img");
                 temp.src = perses[i][0] + "/p.webp";
                 temp.height = 64;
-                temp.style = "display: block;";
+                temp.style = "display: inline-block;";
                 main.appendChild(temp);
+                main.appendChild(document.createElement("br"));
                 temp = document.createElement("input");
                 temp.type = "checkbox";
                 main.appendChild(temp);
@@ -126,54 +154,91 @@
             let file = document.getElementById("input").files[0];
             let reader = new FileReader();
             reader.onload = function () {
-                var oParser = new DOMParser();
-                var oDOM = oParser.parseFromString(reader.result, "application/xml");
-                for (let i = 0; i < 17; i++) {
-                    let curPers = document.getElementById("c" + i.toString());
-                    curPers.children[2].checked = (oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML == "true") ? true : false;
-                    for (let y = 0; y < 3; y++) {
-                        curPers.children[4].children[y].checked = (oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value == "1") ? true : false;
+                try {
+                    var oParser = new DOMParser();
+                    var oDOM = oParser.parseFromString(reader.result, "application/xml");
+                    for (let i = 0; i < 17; i++) {
+                        let curPers = document.getElementById("c" + i.toString());
+                        let unlock = (oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML == "true") ? true : false;
+                        curPers.children[3].checked = unlock;
+                        let persInD = [];
+                        persInD.push(unlock);
+                        for (let y = 0; y < 3; y++) {
+                            let skillUnlock = (oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value == "1") ? true : false;
+                            curPers.children[5].children[y].checked = skillUnlock;
+                            persInD.push(skillUnlock);
+                        }
+                        let oSkins = curPers.children[6];
+                        for (let y = 1; y < oSkins.children.length + 1; y++) {
+                            let skinUnlock = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
+                            oSkins.children[y - 1].children[1].checked = skinUnlock;
+                            persInD.push(skinUnlock);
+                        }
+                        curUnlocks.push(persInD);
                     }
-                    let oSkins = curPers.children[5];
-                    for (let y = 1; y < oSkins.children.length + 1; y++) {
-                        oSkins.children[y - 1].children[1].checked = (oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value == "1") ? true : false;
+                } 
+                catch (e) {
+                    let chel;
+                    switch (e.message) {
+                        case "Cannot read properties of undefined (reading 'attributes')":
+                            chel = "Она могла произойти из-за сломанных данных о раблокировке ульт или скинов";
+                        break;
+                        case "Cannot read properties of undefined (reading 'innerHTML')":
+                            chel = "Она могла произойти из-за сломанных данных о разблокировке персонажей";
+                        break;
+                        default:
+                            chel = "Система определения ошибок не знает такую ошибку((";
+                        break;
                     }
+                    alert("Походу возникла ошибка " + e.message + ". \n" + chel);
                 }
             };
             reader.readAsText(file, "UTF-8");
         }
         function generateSave() {
-            let file = document.getElementById("input").files[0];
-            let reader = new FileReader();
-            let outt;
-            let ready = false;
-            reader.onload = function () {
-                var oParser = new DOMParser();
-                var oDOM = oParser.parseFromString(reader.result, "application/xml");
-                
-                for (let i = 0; i < 17; i++) {
-                    let curPers = document.getElementById("c" + i.toString());
-                    oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (curPers.children[2].checked) ? "true" : "false";
-                    for (let y = 0; y < 3; y++) {
-                        oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value = (curPers.children[4].children[y].checked) ? "1" : "0";
+            if (document.getElementById("input").files[0] != undefined) {
+                let file = document.getElementById("input").files[0];
+                let reader = new FileReader();
+                let outt;
+                reader.onload = function () {
+                    var oParser = new DOMParser();
+                    var oDOM = oParser.parseFromString(reader.result, "application/xml");
+                    for (let i = 0; i < 17; i++) {
+                        let curPers = document.getElementById("c" + i.toString());
+                        let unlock = curPers.children[3].checked;
+                        if(unlock != curUnlocks[i][0]) {
+                            oDOM.getElementsByName("c" + i.toString() + "_unlock")[0].innerHTML = (unlock ? "true" : "false");
+                        }
+                        for (let y = 0; y < 3; y++) {
+                            let skillUnlock = curPers.children[5].children[y].checked;
+                            if(skillUnlock != curUnlocks[i][y + 1]) {
+                                oDOM.getElementsByName("c_" + perses[i][0] + "_skill_" + y.toString() + "_unlock")[0].attributes[1].value = (skillUnlock ? "1" : "0");
+                            }
+                        }
+                        let oSkins = curPers.children[6];
+                        for (let y = 1; y < oSkins.children.length + 1; y++) {
+                            let skinUnlock = oSkins.children[y - 1].children[1].checked;
+                            if(skinUnlock != curUnlocks[i][y + 3]) {
+                                oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (skinUnlock ? "1" : "0");
+                            }
+                        }
                     }
-                    let oSkins = curPers.children[5];
-                    for (let y = 1; y < oSkins.children.length + 1; y++) {
-                        oDOM.getElementsByName("c" + i.toString() + "_skin" + y.toString())[0].attributes[1].value = (oSkins.children[y - 1].children[1].checked) ? "1" : "0";
-                    }
-                }
-                let ser = new XMLSerializer;
-                outt = ser.serializeToString(oDOM);
-                let blob = new Blob([outt], { type: "application/octet-stream" });
-                let url = window.URL.createObjectURL(blob);
-                let a = document.getElementById("down");
-                a.href = url;
-                a.onclick = function () {
-                    document.getElementById("down").onclick = generateSave;
+                    let ser = new XMLSerializer;
+                    outt = ser.serializeToString(oDOM);
+                    let blob = new Blob([outt], { type: "application/octet-stream" });
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.getElementById("down");
+                    a.href = url;
+                    a.onclick = function () {
+                        document.getElementById("down").onclick = generateSave;
+                    };
+                    a.click();
                 };
-                a.click();
-            };
-            reader.readAsText(file, "UTF-8");
+                reader.readAsText(file, "UTF-8");
+            }
+            else {
+                alert("Нужно выбрать файл");
+            }
             event.preventDefault();
         }
     </script>
@@ -185,13 +250,22 @@
     <div>
         <h2>Файл с сохранением</h2><input type="file" id="input" style="display: inline-block;" onchange="updateData()">
     </div>
+    <div id="patches"></div>
     <div>
         <h2>"Пропатченое" сохранение</h2>
-        <a id="down" href="#" download="com.ChillyRoom.DungeonShooter.v2.playerprefs.xml" onclick="generateSave()"><div id="link">Скачать</div></a>
-        <div style="color: red; font-size: larger; margin-top: 10px;">!Важно!</div> Нельзя просто вставить пропатченый файл в в папку shared prefs,
+        <a id="down" href="#" download="com.ChillyRoom.DungeonShooter.v2.playerprefs.xml" onclick="generateSave()">
+            <div id="link">Скачать<img src="down.svg" width="20" style="margin-left: 10px"></div>
+        </a>
+        <div style="color: red; font-size: larger; margin-top: 10px;">!Важно!</div> Нельзя просто вставить пропатченый
+        файл в в папку shared prefs,
         нужно текстовым редактором заменить содержимое непропатченого файла на содержимое пропатченого (copy paste)
     </div>
-    <h2>Выбор скинов</h2>
-    <div id="patches"></div>
+    <!-- <div id="modal_cont">
+        <div id="black_screen"></div>
+        <div id="modal_w">
+            ХЭЙ
+        </div>
+    </div> -->
 </body>
+
 </html>
