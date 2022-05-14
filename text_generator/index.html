@@ -9,16 +9,25 @@
             let cur_x = document.getElementById("x").valueAsNumber;
             let cur_z = document.getElementById("z").valueAsNumber;
             let cur_y = document.getElementById("y").valueAsNumber;
+            let start_z = cur_z;
             let width = document.getElementById("width").valueAsNumber;
             let inp = document.getElementById("itext").value.toLowerCase();
             let ot = document.getElementById("ot");
+            if(document.getElementById("cusFont").value != '') {
+                Object.assign(specialFont, JSON.parse(document.getElementById("cusFont").value));
+            }
+            ot.value = '';
             for (let i = 0; i < inp.length; i++) {
                 let font_char = specialFont[inp[i]];
                 let ch = inp.charCodeAt(i) - 1072;
                 if (font_char == undefined) {
                     font_char = font[ch];
+                    if(font_char == undefined) {
+                        ot.value = "Возникла ошибка \"Неизвестный символ\" (Генератор без дополнительных шрифтов не поддерживает английские буквы)"
+                        return;
+                    }
                 }
-                if (cur_z - font_char[1] < -width) {
+                if (cur_z - font_char[1] < -width + start_z) {
                     cur_z = 0;
                     cur_x += font_char[0] + 1;
                 }
@@ -36,8 +45,10 @@
 </head>
 
 <body>
-    <input type="text" id="itext">
-    <label for="itext">Текст</label>
+    <textarea id="itext" style="height: 100px; width: 350px;"></textarea>
+    <label for="itext" style="position: relative;top: 16px;right: 44px;">Текст</label>
+    <textarea id="cusFont" style="height: 100px; width: 350px;"></textarea>
+    <label for="itext" style="position: relative;top: 16px;right: 140px;">Кастомные шрифты</label>
     <br>
     <label for="x">Начальная позиция</label>
     <br>
@@ -45,11 +56,11 @@
     <input type="number" id="y" style="width: 40px;" value="0">
     <input type="number" id="z" style="width: 40px;" value="0">
     <br>
-    <input type="number" id="width" value="100">
+    <input type="number" id="width" value="100" style="margin: 5px;">
     <label for="width">Ширина</label>
     <button onclick="generate()">Напечаткать</button>
     <br>
-    <textarea id="ot"></textarea>
+    <textarea id="ot" style="height:500px; width: 350px"></textarea>
 </body>
 
 </html>
