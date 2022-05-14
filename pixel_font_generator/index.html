@@ -3,13 +3,14 @@
 
 <head>
     <style>
-        .r {
-            background-color: #000;
-        }
+        .r { background-color: #000; }
+        #h,#w { width:30px }
     </style>
     <script>
-        window.onload = function() {
-            updateSize();
+        window.onload = function() { 
+            updateSize(); 
+            document.getElementById("out").value = "{"; 
+            document.getElementById("char").oninput = function() {this.value = this.value.length > 1 ? this.value[0] : this.value; };
         }
         var out = 0;
         function updateSize() {
@@ -32,10 +33,17 @@
                 }
                 tbl.appendChild(row);
             }
-            tbl.parentElement.style = "width:" + (document.getElementById("w").valueAsNumber * 50).toString() + "px;height: " + (document.getElementById("h").valueAsNumber * 50).toString() + "px";
+            tbl.parentElement.style = "width:" + (document.getElementById("w").valueAsNumber * 50).toString() + "px;height: " + (document.getElementById("h").valueAsNumber * 50).toString() + "px; margin: 5px 0 5px 0;";
         }
         function add() {
-            document.getElementById("out").value += "[" + document.getElementById("h").value + ", " + document.getElementById("w").value + ", " + out + "], ";
+            let creChar = document.getElementById("char");
+            let out_txt = document.getElementById("out");
+            if(out_txt.value[out_txt.value.length - 1] == "}") {
+                out_txt.value = out_txt.value.substring(0, out_txt.value.length - 1) + ", ";
+            }
+            out_txt.value += "\"" + creChar.value + "\": [" + document.getElementById("h").value + ", " + document.getElementById("w").value + ", " + out + "]}";
+            creChar.value = '';
+            creChar.focus();
             updateSize();
         }
     </script>
@@ -44,12 +52,13 @@
 <body>
     <input type="number" id="h" value="5" onchange="updateSize()">
     <input type="number" id="w" value="4" onchange="updateSize()">
-    <table style="width: 200px; height: 200px;">
+    <table style="width: 200px; height: 200px; display: inline-block; margin: 5px 0 5px 0;">
         <tbody id="table"></tbody>
     </table>
+    <input type="text" id="char" style="width: 20px;">
     <button onclick="updateSize()">Стереть</button>
     <button onclick="add()">Добавить</button>
-    <textarea id="out" style="display: block"></textarea>
+    <textarea id="out" style="display: block; height: 200px; width: 200px; margin-top: 5px;"></textarea>
 </body>
 
 </html>
