@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        var font = [[5, 4, 653718], [5, 4, 497431], [5, 4, 497559], [5, 4, 70047], [5, 5, 18852172], [5, 4, 988959], [5, 5, 22723253], [5, 4, 431254], [5, 4, 638425], [5, 4, 776454], [5, 4, 643929], [5, 4, 633516], [5, 5, 18405233], [5, 4, 630681], [5, 4, 432534], [5, 4, 629151], [5, 4, 71575], [5, 4, 430486], [5, 5, 4329631], [5, 4, 511641], [5, 5, 4675246], [5, 5, 28643675], [5, 4, 587093], [5, 4, 584089], [5, 5, 33216177], [5, 5, 17815217], [5, 5, 15288771], [5, 5, 20631089], [5, 4, 497425], [5, 4, 495239], [5, 5, 10149545], [5, 4, 649630], [5, 4, 988959]];
+        var specialFont = { ",": [5, 4, 557056], "-": [5, 4, 1536], ".": [5, 4, 524288], " ": [5, 4, 0] };
+        function generate() {
+            let cur_x = document.getElementById("x").valueAsNumber;
+            let cur_z = document.getElementById("z").valueAsNumber;
+            let cur_y = document.getElementById("y").valueAsNumber;
+            let width = document.getElementById("width").valueAsNumber;
+            let inp = document.getElementById("itext").value.toLowerCase();
+            let ot = document.getElementById("ot");
+            for (let i = 0; i < inp.length; i++) {
+                let font_char = specialFont[inp[i]];
+                let ch = inp.charCodeAt(i) - 1072;
+                if (font_char == undefined) {
+                    font_char = font[ch];
+                }
+                if (cur_z - font_char[1] < -width) {
+                    cur_z = 0;
+                    cur_x += font_char[0] + 1;
+                }
+                for (let y = 0; y < font_char[0]; y++) {
+                    for (let z = 0; z < font_char[1]; z++) {
+                        if ((font_char[2] & (1 << (y * font_char[1] + z))) > 0) {
+                            ot.value += "setblock " + (cur_x + y).toString() + " " + cur_y.toString() + " " + (cur_z - z).toString() + " stone\n";
+                        }
+                    }
+                }
+                cur_z -= font_char[1] + 1;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="itext">
+    <label for="itext">Текст</label>
+    <br>
+    <label for="x">Начальная позиция</label>
+    <br>
+    <input type="number" id="x" style="width: 40px;" value="0">
+    <input type="number" id="y" style="width: 40px;" value="0">
+    <input type="number" id="z" style="width: 40px;" value="0">
+    <br>
+    <input type="number" id="width" value="100">
+    <label for="width">Ширина</label>
+    <button onclick="generate()">Напечаткать</button>
+    <br>
+    <textarea id="ot"></textarea>
+</body>
+
+</html>

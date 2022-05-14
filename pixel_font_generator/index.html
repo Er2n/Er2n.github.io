@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .r {
+            background-color: #000;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            updateSize();
+        }
+        var out = 0;
+        function updateSize() {
+            out = 0;
+            let tbl = document.getElementById("table");
+            tbl.innerHTML = '';
+            for (let i = 0; i < document.getElementById("h").valueAsNumber; i++) {
+                let row = document.createElement("tr");
+                for (let y = 0; y < document.getElementById("w").valueAsNumber; y++) {
+                    let col = document.createElement("td");
+                        col.onclick = function () {
+                            this.classList.add("r");
+                            let i = parseInt(this.id.substring(1).split("_")[0]);
+                            let y = parseInt(this.id.substring(1).split("_")[1]);
+                            out = out | (1 << (i * document.getElementById("w").valueAsNumber + y));
+                        } 
+                    col.id = "c" + i.toString() + '_' + y.toString();
+                    col.style = "border: 1px dashed silver";
+                    row.appendChild(col);
+                }
+                tbl.appendChild(row);
+            }
+            tbl.parentElement.style = "width:" + (document.getElementById("w").valueAsNumber * 50).toString() + "px;height: " + (document.getElementById("h").valueAsNumber * 50).toString() + "px";
+        }
+        function add() {
+            document.getElementById("out").value += "[" + document.getElementById("h").value + ", " + document.getElementById("w").value + ", " + out + "], ";
+            updateSize();
+        }
+    </script>
+</head>
+
+<body>
+    <input type="number" id="h" value="5" onchange="updateSize()">
+    <input type="number" id="w" value="4" onchange="updateSize()">
+    <table style="width: 200px; height: 200px;">
+        <tbody id="table"></tbody>
+    </table>
+    <button onclick="updateSize()">Стереть</button>
+    <button onclick="add()">Добавить</button>
+    <textarea id="out" style="display: block"></textarea>
+</body>
+
+</html>
