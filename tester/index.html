@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text generator for minecraft tester
+    </title>
+    <script>
+        function gen() {
+            let con = document.getElementById("canvas").getContext("2d");
+            let commands = document.getElementById("in").value.split("\n");
+            con.clearRect(0, 0, document.getElementById("canvas").width, document.getElementById("canvas").height)
+            commands.forEach(element => {
+                let coords = element.substring(9, element.length - 6).split(" ");
+                let z_coord = parseInt(coords[0]);
+                let x_coord = parseInt(coords[2]);
+                let scale_x = 480 / document.getElementById("x").valueAsNumber;
+                let scale_z = 800 / document.getElementById("z").valueAsNumber;
+                con.fillRect(x_coord * scale_x, z_coord * scale_z, scale_x, scale_z);
+            });
+        }
+    </script>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px dashed silver;" height="480px" width="800px"></canvas>
+    <input type="number" id="x" style="width: 50px;" value="48">
+    <input type="number" id="z" style="width: 50px;" value="80">
+    <br>
+    <textarea id="in" cols="30" rows="10"></textarea>
+    <br>
+    <button onclick="gen()">Генерировать?</button>
+    </body>
+</html>

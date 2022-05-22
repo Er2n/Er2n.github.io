@@ -27,18 +27,18 @@
                         return;
                     }
                 }
-                if (cur_z - font_char[1] < -width + start_z) {
+                if (cur_z + font_char[1] > width + start_z) {
                     cur_z = 0;
                     cur_x += font_char[0] + 1;
                 }
                 for (let y = 0; y < font_char[0]; y++) {
                     for (let z = 0; z < font_char[1]; z++) {
                         if ((font_char[2] & (1 << (y * font_char[1] + z))) > 0) {
-                            ot.value += "setblock " + (cur_x + y).toString() + " " + cur_y.toString() + " " + (cur_z - z).toString() + " stone\n";
+                            ot.value += "setblock " + (cur_x + font_char[0] - 1 - y).toString() + " " + cur_y.toString() + " " + (cur_z + z).toString() + " stone\n";
                         }
                     }
                 }
-                cur_z -= font_char[1] + 1;
+                cur_z += font_char[1] + 1;
             }
         }
     </script>
