@@ -35,12 +35,11 @@
             margin: 0 100px 20px 100px;
         }
 
-        #thingsToDo {
+        .flex {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            padding: 50px;
         }
 
         .toDoElem {
@@ -130,6 +129,9 @@
         .rotate {
             transform: rotate(0.5turn);
         }
+        #lblue {
+            padding: 10px 100px 10px 100px;
+        }
     </style>
 </head>
 
@@ -159,8 +161,7 @@
         </div>
         <img src="banner.png" id="renImg" style="height: 100%; z-index: -1;">
     </div>
-
-    <div id="thingsToDo">
+    <div class="flex" style="padding: 50px;">
         <div class="toDoElem">
             <img src="ork-kopaet.png" style="height: 80%;">
             <div style="font-size: larger;">Развивайтесь</div>
@@ -183,7 +184,7 @@
             <div style="font-size: larger;">Создавайте маштабные проекты</div>
         </div>
     </div>
-    <div style="margin: 0 100px 0 100px;">
+    <div id="lblue" style="border-top: silver dashed 2px;">
         <span style="font-size: 25px;">StoneLight - сервер ванильного выживания, имеющий некоторые дополнения и небольшие изменения игровых механик.<br> На сервере: </span>
         <ul style="text-align: left; font-size: larger;">
             <li>Измененены некоторые торги у жителей<img src="more.svg" height="20" style="vertical-align: middle; margin-left: 5px; transition: transform 0.4s;" onclick="onoff('alm', this)"></li>
@@ -192,14 +193,33 @@
             <div class="hide note" id="rp">В ресурспак включены: различные шляпы появляющиеся при переименовании тыкв, карты (переименованая бумага) </div>
             <li>Установлен датапак Blaze And Cave's добавляющий в игру около 1000 новых достижений</li>
             <li>Уменьшен шанс дропа тотема с призывателя со 100 до 5%</li>
-            <li>БИБА</li>
-            <li>БОБА</li>
         </ul>
+    </div>
+    <div id="rules" style="border-top: silver dashed 2px;">
+        <div style="font-size: 25px;">Основные правила</div>
+        <div class="flex">
+            <div class="toDoElem">
+                <img src="nogrif.png" style="width: 100%;">
+                <div style="font-size: larger;">Запрещен гриф</div>
+            </div>
+            <div class="toDoElem">
+                <img src="nocheat.png" style="width: 100%;">
+                <div style="font-size: larger;">Запрещены читы</div>
+            </div>
+            <div class="toDoElem">
+                <img src="tveanks.png" style="width: 100%;">
+                <div style="font-size: larger;">Нельзя иметь более 1 аккаунта</div>
+            </div>
+            <div class="toDoElem">
+                <img src="noToxic.jpg" style="width: 100%;">
+                <div style="font-size: larger;">Нельзя оскорблять и токсичить в чатах</div>
+            </div>
+        </div>
     </div>
     <div id="admins">
         <div style="font-size: larger; color: white;">Администрация</div>
         <div id="adminFlex">
-            <a class="admin" href="https://i.ibb.co/X3Wz5D6/941764348.png">
+            <a class="admin" href="https://i.ibb.co/7bzCFGk/84428eae99c40b78a6d7dccd6805fc76-c5-720x720.jpg">
                 <img src="Dedus.png" height="60" style="display: inline-block; vertical-align: middle;">
                 <div style="display: inline-block; vertical-align: middle;">
                     DedKob
@@ -207,22 +227,30 @@
                     Основатель сервера
                 </div>
             </a>
-            <div class="admin">
+            <a class="admin" href="https://i.ibb.co/KXTBj1S/body.png">
                 <img src="Vanya.png" height="60" style="display: inline-block; vertical-align: middle;">
                 <div style="display: inline-block; vertical-align: middle;">
                     FunnyVanya
                     <br>
                     Император
                 </div>
-            </div>
-            <div class="admin">
+            </a>
+            <a class="admin" href="https://i.ibb.co/X3Wz5D6/941764348.png">
                 <img src="Tisus.png" height="60" style="display: inline-block; vertical-align: middle;">
                 <div style="display: inline-block; vertical-align: middle;">
                     ArchTeese
                     <br>
                     Примарх
                 </div>
-            </div>
+            </a>
+            <a class="admin" href="https://i.ibb.co/7ryFTF1/1619742318-7-oir-mobi-p-dobrii-medved-zhivotnie-krasivo-foto-7.jpg">
+                <img src="Yan.png" height="60" style="display: inline-block; vertical-align: middle;">
+                <div style="display: inline-block; vertical-align: middle;">
+                    Yan_Gaming
+                    <br>
+                    Техножрец Дс
+                </div>
+            </a>
             <a class="admin" href="https://i.ibb.co/9qW4PDT/ea43ce81-6cb2-479d-8c2e-fadd443af6f6.png">
                 <img src="Unirit.png" height="60" style="display: inline-block; vertical-align: middle;">
                 <div style="display: inline-block; vertical-align: middle;">
