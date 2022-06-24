@@ -264,7 +264,6 @@
                 </div>
             </a>
         </div>
-        
     </div>
     <script>
         function hide(id) {
@@ -281,6 +280,11 @@
             else {
                 thiS.classList.remove("rotate");
                 hide(id);
+            }
+        }
+        window.onload = function() {
+            if(window.outerHeight > window.outerWidth) {
+                document.getElementsByTagName("body")[0].innerHTML = "<style>html,body {height: 100%;}</style><div class=\"flex\" style=\"height: 100%\"><div style=\"font-size: 50px;\">На данный момент сайт плохо работает с мобильными устройствами. Переверните свой телефон и перезагрузите сайт</div></div>";
             }
         }
     </script>
